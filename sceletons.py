@@ -1,5 +1,5 @@
 
-def createVnf(image, ram, vcpu, storage, name, description = ""):
+def createVnf(image, ram, vcpu, storage, name, description = "", cloud_config = ""):
 
     str_json = {
   "id": name,
@@ -49,7 +49,7 @@ def createVnf(image, ram, vcpu, storage, name, description = ""):
   "vdu": [
     {
       "id": "ubuntu_VM",
-      "cloud-init": "#cloud-config\npreserve_hostname: false\nhostname: openstack-machine\npassword: 12345\nchpasswd: { expire: False }\nssh_pwauth: True\n",
+      "cloud-init": cloud_config,
       "int-cpd": [
         {
           "id": "int_ubuntu_VM",

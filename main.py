@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QHBoxLayout, QLabel, QWidget, QApplication, \
     QAction, qApp, QPushButton, QDesktopWidget, QComboBox, QProgressBar, QLineEdit, \
-    QSpacerItem, QVBoxLayout, QGroupBox
+    QSpacerItem, QVBoxLayout, QGroupBox, QRadioButton
 import os
 from PyQt5 import uic
 import requests
@@ -12,7 +12,7 @@ from PyQt5.QtCore import QTimer, QDateTime
 from math import ceil, floor
 
 class Settings():
-    URL_MANO = 'http://10.0.69.115/osm'
+    URL_MANO = ''
     API_TOKENS = '/admin/v1/tokens'
     API_VIM_ACCOUNTS = '/admin/v1/vim_accounts'
     API_CREATE_VNF = '/vnfpkgm/v1/vnf_packages_content'
@@ -28,7 +28,7 @@ class Settings():
     OPENSTACK_NETWORKS = ["shared", "public"]
     STATUS_VNF_CREATED, STATUS_NS_CREATED, STATUS_INSTANCE_CREATED = 201, 201, 201
     STATUS_NS_DELETE = 202
-    STATU_TOKEN_CREATE = 200
+    STATUS_TOKEN_CREATE = 200
 
 class MainWidget(QWidget):
 
@@ -47,6 +47,9 @@ class MainWidget(QWidget):
         self.label_network.setText("Network: ")
         self.label_vim.setText("Set VIM: ")
         self.pushButtonDelete.setVisible(False)
+        self.radioButtonCloud.setChecked(False)
+        self.textEditCloudConfig.setDisabled(True)
+        self.radioButtonCloud.clicked.connect(self.radioBtn)
         self.getVims()
         self.fillCombos()
         self.comboBoxVims.currentTextChanged.connect(self.getVimIp)
@@ -63,6 +66,13 @@ class MainWidget(QWidget):
         self.counter = 3600
         self.startWatch = True
         self.labelClock.setText('')
+
+    def radioBtn(self):
+        if self.radioButtonCloud.isChecked():
+            self.textEditCloudConfig.setDisabled(False)
+        else:
+            self.textEditCloudConfig.setDisabled(True)
+            self.textEditCloudConfig.setText('')
 
     def showCounter(self):
         if self.startWatch:
@@ -129,13 +139,18 @@ class MainWidget(QWidget):
         description = self.lineEditDescription.text()
         vimName = self.comboBoxVims.currentText()
         vimId = self.vim_list[vimName][0]
-        header = {"Content-type": "text/plain",
+        header = {"Content-type": "application/json",
                   "Accept": "application/json",
                   "Authorization": "Bearer " + Settings.TOKEN}
         if self.base_vnf_ns_name != '':
             #create VNFd
             vnf_id_name = self.base_vnf_ns_name + '_vnf'
-            vnf = sceletons.createVnf(image, ram, vcpu, storage, vnf_id_name, description)
+            cloud_config = ""
+            if self.radioButtonCloud.isChecked():
+                data_cloud = self.textEditCloudConfig.toPlainText()
+                if data_cloud != "":
+                    cloud_config = data_cloud.replace('\n', "\n")
+            vnf = sceletons.createVnf(image, ram, vcpu, storage, vnf_id_name, description, cloud_config)
             # json.dumps() converts a dictionary to str object
             url = Settings.URL_MANO + Settings.API_CREATE_VNF
             # request to add VNFd
@@ -196,6 +211,7 @@ class MainWidget(QWidget):
             self.progressBar.setValue(0)
             self.lineEdit.setText('')
             self.lineEditDescription.setText('')
+            self.textEditCloudConfig.setText('')
         
 
 
@@ -207,10 +223,12 @@ class Login(QDialog):
         self.lineEditProject.setText("admin")
         self.lineEdit.setText("admin")
         self.lineEditPass.setText("admin")
+        self.lineEditUrl.setText("http://10.0.69.115") #http://10.0.69.115/osm
         self.lineEditPass.setEchoMode(QLineEdit.Password)
 
     def handleLogin(self):
         flag = False
+        Settings.URL_MANO = self.lineEditUrl.text() + '/osm'
         login = self.lineEdit.text()
         password = self.lineEditPass.text()
         project = self.lineEditProject.text()
@@ -221,7 +239,7 @@ class Login(QDialog):
         r.encoding
         jsonData = r.json()
         status = int(r.status_code)
-        if status == Settings.STATU_TOKEN_CREATE:
+        if status == Settings.STATUS_TOKEN_CREATE:
             token = jsonData['_id']
             if len(token) > 10:
                 flag = True

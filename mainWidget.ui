@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>398</height>
+    <width>410</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>401</width>
-     <height>291</height>
+     <width>391</width>
+     <height>421</height>
     </rect>
    </property>
    <property name="title">
@@ -30,7 +30,7 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>381</width>
+      <width>371</width>
       <height>262</height>
      </rect>
     </property>
@@ -39,13 +39,32 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QLabel" name="labelNameInstance">
+         <property name="minimumSize">
+          <size>
+           <width>65</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="text">
           <string>TextLabel</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="minimumSize">
+          <size>
+           <width>110</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>110</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_2">
@@ -86,6 +105,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
         <widget class="QLabel" name="label_descr">
+         <property name="minimumSize">
+          <size>
+           <width>66</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="text">
           <string>TextLabel</string>
          </property>
@@ -99,7 +124,20 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEditDescription"/>
+        <widget class="QLineEdit" name="lineEditDescription">
+         <property name="minimumSize">
+          <size>
+           <width>110</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>110</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_9">
@@ -365,15 +403,44 @@
      </item>
     </layout>
    </widget>
+   <widget class="QTextEdit" name="textEditCloudConfig">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>371</width>
+      <height>101</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QRadioButton" name="radioButtonCloud">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>300</y>
+     <width>101</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add cloud-config</string>
+   </property>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>319</y>
-     <width>401</width>
+     <x>10</x>
+     <y>440</y>
+     <width>391</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>50</height>
+    </size>
    </property>
    <property name="title">
     <string>Instance management</string>
@@ -381,7 +448,7 @@
    <widget class="QPushButton" name="execBut">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>20</y>
       <width>75</width>
       <height>23</height>
@@ -397,11 +464,17 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>81</x>
+      <x>90</x>
       <y>21</y>
-      <width>235</width>
+      <width>211</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>211</width>
+      <height>16777215</height>
+     </size>
     </property>
     <property name="minimum">
      <number>0</number>
@@ -419,7 +492,7 @@
    <widget class="QPushButton" name="pushButtonDelete">
     <property name="geometry">
      <rect>
-      <x>322</x>
+      <x>310</x>
       <y>20</y>
       <width>75</width>
       <height>23</height>

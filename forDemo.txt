@@ -1,0 +1,26 @@
+####### COMPUTE #########
+
+#cloud-config
+preserve_hostname: false
+hostname: openstack-machine
+password: 12345
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+
+
+
+
+####### POSTGRES #########
+
+Ip: 10.0.69.112
+Логин: dakornev1
+Пароль: pae9Eing
+
+ssh -D 1088 ubuntu@devstack-1
+
+в Мозилле - 127.0.0.1 9999
+
+url + /pgadmin4
+
+admin@admin.ru  123456
