@@ -220,9 +220,9 @@ class Login(QDialog):
         super(Login, self).__init__(parent)
         uic.loadUi('dialog.ui', self)
         self.buttonLogin.clicked.connect(self.handleLogin)
-        self.lineEditProject.setText("admin")
-        self.lineEdit.setText("admin")
-        self.lineEditPass.setText("admin")
+        self.lineEditProject.setText("")
+        self.lineEdit.setText("")
+        self.lineEditPass.setText("")
         self.lineEditUrl.setText("http://10.0.69.115") #http://10.0.69.115/osm
         self.lineEditPass.setEchoMode(QLineEdit.Password)
 
