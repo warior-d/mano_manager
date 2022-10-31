@@ -12,6 +12,9 @@ from PyQt5.QtCore import QTimer, QDateTime
 from math import ceil, floor
 
 class Settings():
+    CURRENT_LOGIN = ''
+    CURRENT_PASSWORD = ''
+    CURRENT_PROJECT = ''
     URL_MANO = ''
     API_TOKENS = '/admin/v1/tokens'
     API_VIM_ACCOUNTS = '/admin/v1/vim_accounts'
@@ -24,7 +27,7 @@ class Settings():
     CPU_QNT = ['1', '2', '3', '4']
     STORAGE_SIZES = ['5', '10', '15', '20']
     IMAGES = ['Ubuntu 18.04', 'Ubuntu 20.04', 'CentOS 7', 'CentOS 8']
-    OPENSTACK_IMAGES = {"Ubuntu 18.04" : "ubuntu18.04", "Ubuntu 20.04" : "ubuntu20.04", "CentOS 7" : "centos7", "Postgresql" : "postgres-image"}
+    OPENSTACK_IMAGES = {"Ubuntu 18.04" : "ubuntu18.04", "Ubuntu 20.04" : "ubuntu20.04", "CentOS 8" : "centos8", "Postgresql" : "postgres-image"}
     OPENSTACK_NETWORKS = ["shared", "public"]
     STATUS_VNF_CREATED, STATUS_NS_CREATED, STATUS_INSTANCE_CREATED = 201, 201, 201
     STATUS_NS_DELETE = 202
@@ -40,7 +43,7 @@ class MainWidget(QWidget):
         self.vim_list = {}
         self.labelNameInstance.setText("Instance name: ")
         self.label_descr.setText("Description: ")
-        self.label_image.setText("Image: ")
+        self.label_image.setText("Service: ")
         self.label_ram.setText("RAM: ")
         self.label_cpu.setText("vCPU: ")
         self.label_storage.setText("Storage: ")
@@ -53,6 +56,7 @@ class MainWidget(QWidget):
         self.getVims()
         self.fillCombos()
         self.comboBoxVims.currentTextChanged.connect(self.getVimIp)
+        self.comboBoxImages.currentTextChanged.connect(self.setStorage)
         self.execBut.clicked.connect(self.execute)
         self.pushButtonDelete.clicked.connect(self.delete)
         self.base_vnf_ns_name = ''
@@ -66,6 +70,15 @@ class MainWidget(QWidget):
         self.counter = 3600
         self.startWatch = True
         self.labelClock.setText('')
+
+    def setStorage(self):
+        curChek = self.comboBoxImages.currentText()
+        if curChek in ('Postgresql'):
+            self.label_storage.setText("DB Size: ")
+            self.setWindowTitle('Create Database')
+        else:
+            self.label_storage.setText("Storage: ")
+            self.setWindowTitle('Create Instance')
 
     def radioBtn(self):
         if self.radioButtonCloud.isChecked():
@@ -83,6 +96,25 @@ class MainWidget(QWidget):
         sec_show = f"{seconds:02d}"
         text = min_show + ':' + sec_show
         self.labelClock.setText(text)
+        if self.counter < 1:
+            self.restart()
+
+    def restart(self):
+        self.counter = 3600
+        login = Settings.CURRENT_LOGIN
+        password = Settings.CURRENT_PASSWORD
+        project = Settings.CURRENT_PROJECT
+        url = Settings.URL_MANO + Settings.API_TOKENS
+        post_fields = {'username': login, 'password': password, 'project_id': project}  # Set POST fields here
+        header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/json"}
+        r = requests.post(url, data=urlencode(post_fields), headers=header)
+        r.encoding
+        jsonData = r.json()
+        status = int(r.status_code)
+        if status == Settings.STATUS_TOKEN_CREATE:
+            token = jsonData['_id']
+            if len(token) > 10:
+                Settings.TOKEN = token
 
 
     def getVims(self):
@@ -121,6 +153,7 @@ class MainWidget(QWidget):
         curChek = self.comboBoxVims.currentText()
         ip = self.vim_list[curChek][2]
         self.labelIp.setText(ip)
+
 
     def deleteBtnVisual(self):
         if self.pushButtonDelete.isVisible():
@@ -232,6 +265,9 @@ class Login(QDialog):
         login = self.lineEdit.text()
         password = self.lineEditPass.text()
         project = self.lineEditProject.text()
+        Settings.CURRENT_LOGIN = login
+        Settings.CURRENT_PASSWORD = password
+        Settings.CURRENT_PROJECT = project
         url = Settings.URL_MANO + Settings.API_TOKENS
         post_fields = {'username': login, 'password': password, 'project_id': project}  # Set POST fields here
         header = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/json"}

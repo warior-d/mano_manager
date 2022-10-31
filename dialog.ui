@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>270</width>
-    <height>275</height>
+    <height>326</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>100</y>
+     <y>140</y>
      <width>192</width>
      <height>143</height>
     </rect>
@@ -209,7 +209,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>250</y>
+     <y>290</y>
      <width>191</width>
      <height>21</height>
     </rect>
@@ -232,6 +232,22 @@
    </property>
    <property name="pixmap">
     <pixmap>logo2.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>80</y>
+     <width>201</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>MTS_Logo_rus_min.png</pixmap>
    </property>
   </widget>
  </widget>
